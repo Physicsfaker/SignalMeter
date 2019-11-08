@@ -4,11 +4,29 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\laptop.ico</ApplicationIcon>
+    <Company>Physicsfaker</Company>
+    <Authors>Physicsfaker</Authors>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="OxyPlot.Wpf" Version="2.0.0" />
     <PackageReference Include="System.IO.Ports" Version="4.7.0-preview1.19504.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
