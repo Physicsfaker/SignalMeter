@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:oxy="http://oxyplot.org/wpf"
     xmlns:viewmodels="clr-namespace:SignalMeter.ViewModels"
-    Title="MainWindow"
+    Title="SignalMeter"
     Width="1024"
     Height="768"
     MinWidth="800"
@@ -28,31 +28,12 @@
             <RowDefinition Height="10*" />
             <RowDefinition Height="20*" />
         </Grid.RowDefinitions>
-        <ComboBox
-            x:Name="ComPortBox"
-            Grid.Row="1"
-            Grid.Column="1"
-            Width="60"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            ItemsSource="{Binding Path=AvailablePorts}"
-            SelectedValue="{Binding PortNumber}" />
 
-        <Grid Grid.ColumnSpan="2">
-            <Grid.Background>
-                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                    <GradientStop Color="Black" />
-                    <GradientStop Offset="1" Color="#FF3E3030" />
-                </LinearGradientBrush>
-            </Grid.Background>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="554.03" />
-            </Grid.RowDefinitions>
+        <Grid Grid.ColumnSpan="2" Margin="0,0,0,0">
+
             <oxy:PlotView
-                Grid.ColumnSpan="1"
+                Grid.RowSpan="1"
                 Margin="10,10,10,10"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
                 Model="{Binding MyModel}">
                 <oxy:PlotView.Background>
                     <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
@@ -70,32 +51,77 @@
             Grid.ColumnSpan="2"
             Margin="10,10,10,10"
             ItemsSource="{Binding ListBoxContent, Mode=OneWay}" />
-        <TextBox
-            Grid.Row="1"
-            Margin="0,0,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            FontSize="20"
-            Text="{Binding Clicks}" />
-        <Button
-            Grid.Row="1"
-            Grid.ColumnSpan="2"
-            Width="100"
-            Height="45"
-            Margin="0,0,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Command="{Binding ButtonCommand}"
-            Content="{Binding ButtonContent}"
-            FontWeight="Bold" />
         <Label
             Grid.Row="1"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Content="Log list:"
-            FontSize="16"
-            FontWeight="Bold"
+            FontSize="14"
+            FontWeight="Normal"
             Foreground="White" />
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="0,0,10,0"
+            HorizontalAlignment="Right"
+            Orientation="Horizontal">
+            <TextBlock
+                Margin="0,0,10,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="14"
+                FontWeight="Normal"
+                Foreground="White"
+                Text="Port:" />
+            <ComboBox
+                x:Name="ComPortBox"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                ItemsSource="{Binding AvailablePorts}"
+                SelectedValue="{Binding PortNumber}" />
+
+        </StackPanel>
+        <StackPanel
+            Grid.Row="1"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch"
+            Orientation="Horizontal">
+            <Button
+                Width="100"
+                Margin="0,5,0,5"
+                Command="{Binding StartStopButtonCommand}"
+                Content="{Binding StartStopButtonContent}"
+                FontSize="14"
+                FontStyle="Normal"
+                FontWeight="Normal">
+                <Button.Background>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FFF3F3F3" />
+                        <GradientStop Offset="1" Color="#FFF3891F" />
+                        <GradientStop Color="#FFFFBA41" />
+                    </RadialGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button
+                Margin="5,10,0,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Command="{Binding AutoScrollButtonCommand}"
+                Content="Auto scale"
+                FontFamily="Segoe UI Symbol"
+                FontSize="11"
+                FontStyle="Normal">
+                <Button.Background>
+                    <RadialGradientBrush>
+                        <GradientStop Color="#FFEADD59" />
+                        <GradientStop Offset="1" Color="#FFE2D338" />
+                    </RadialGradientBrush>
+                </Button.Background>
+            </Button>
+
+        </StackPanel>
     </Grid>
 </Window>
