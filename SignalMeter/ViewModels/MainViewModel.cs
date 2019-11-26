@@ -10,13 +10,13 @@ using System.Windows;
 using System.Windows.Input;
 
 
-namespace SignalMeter.ViewModels
+namespace SignalMeter.ViewModels //Only 2 streams: stream for measurements and GUI
 {
     class MainViewModel : INotifyPropertyChanged
     {
-        static double start = 0;
-        static bool proces = false;
-
+        static double start = 0;  //reference point for the time axis
+        static bool proces = false; //program state mode trigger
+        static byte[] tcpData;
 
         public ComPort _mainPort;
         public ComPort MainPort { get => _mainPort; set { _mainPort = value; OnPropertyChanged(); } }
@@ -95,6 +95,8 @@ namespace SignalMeter.ViewModels
             #endregion
 
             ListBoxContent = new ObservableCollection<string>();
+
+            Task.Run(() => ServerTcp.Start(ref tcpData)); // Sending data to outside through a tcp socket
         }
 
         #region Auto_Scroll_Button
@@ -128,13 +130,13 @@ namespace SignalMeter.ViewModels
                 byte[] request = { 0xAB, 0x18, 0x00, 0x00, 0xE8 };
                 start = DateTimeAxis.ToDouble(DateTime.Now);
 
-                //double time = 0;//------------
-                //Random rand = new Random();//----------
+                double time = 0;//-----debug mode------
+                Random rand = new Random();//-----debug mode------
                 while (proces)
                 {
-                    //Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now) - start, rand.Next(5000,25000)*rand.NextDouble())); //-------------
-                    //MyModel.InvalidatePlot(true);//---
-                    //time += delay;//-------------
+                    Points.Add(new DataPoint(DateTimeAxis.ToDouble(DateTime.Now) - start, rand.Next(5000, 25000) * rand.NextDouble())); //-----debug mode------
+                    MyModel.InvalidatePlot(true);//-----debug mode------
+                    time += delay;//-----debug mode------
 
                     MainPort.Write(request);
                     App.Current.Dispatcher.Invoke((Action)delegate
@@ -155,6 +157,7 @@ namespace SignalMeter.ViewModels
                     byte[] graph;
                     if (ComData == null) return;
                     graph = ComData;
+                    tcpData = ComData;
 
                     if (_listBoxContent.Count > 10) _listBoxContent.RemoveAt(0);
                     if (graph.Length == 10)
@@ -178,7 +181,7 @@ namespace SignalMeter.ViewModels
         #region Other
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) //действия при закрытии приложения
         {
-            if (MessageBoxResult.No == MessageBox.Show("Вы действительно хотите закрыть программу?", "Закрытие программы", MessageBoxButton.YesNo, MessageBoxImage.Warning))
+            if (MessageBoxResult.No == MessageBox.Show("Do you really want to close the program?", "Closing the program", MessageBoxButton.YesNo, MessageBoxImage.Warning))
             {
                 e.Cancel = true;
                 return;

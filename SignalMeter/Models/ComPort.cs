@@ -12,8 +12,8 @@ namespace SignalMeter
 {
     public class ComPort : INotifyPropertyChanged
     {
-        private SerialPort currentSerial { get; set; } //хранит ком порт
-        private string portName = "COM3";
+        private SerialPort currentSerial { get; set; } //stores com port
+        private string portName = "COM3"; //default
         private int BaudRate = 115200;
         public string PortName { get { return portName; } set { portName = value; InitComPort(); } }
        
@@ -26,7 +26,7 @@ namespace SignalMeter
             currentSerial.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
         }
 
-        private void InitComPort() //задает номер порта и скорость
+        private void InitComPort() //sets the port number and other parameters
         {
             var serial = currentSerial.PortName;
 
@@ -45,12 +45,12 @@ namespace SignalMeter
             try { currentSerial.Open(); }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show($"Доступ к порту '{CurrentPort}' закрыт.");
+                MessageBox.Show($"Access to port '{CurrentPort}' is denied.");
                 currentSerial.PortName = serial;
             }
             catch (System.IO.IOException)
             {
-                MessageBox.Show($"Порт '{CurrentPort}' не существует.");
+                MessageBox.Show($"Port '{CurrentPort}' does not exist.");
             }
         }
 
@@ -72,8 +72,8 @@ namespace SignalMeter
             });
         }
 
-        public string CurrentPort => currentSerial.PortName.ToString(); //получить имя текущего порта
-        static public string[] GetPorts() => SerialPort.GetPortNames(); // получить список всех доступных портов
+        public string CurrentPort => currentSerial.PortName.ToString(); // get the name of the current port
+        static public string[] GetPorts() => SerialPort.GetPortNames(); // get a list of all available ports
         public bool IsOpen => currentSerial.IsOpen;
 
 
@@ -90,7 +90,6 @@ namespace SignalMeter
             {
                 MessageBox.Show($"Порт '{CurrentPort}' не существует.");
             }
-            //NewDataTransfered(bytes);g
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
